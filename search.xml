@@ -3,56 +3,77 @@
   
     
     <entry>
-      <title><![CDATA[我的资源]]></title>
-      <url>/2018/01/12/%E6%88%91%E7%9A%84%E8%B5%84%E6%BA%90/</url>
-      <content type="html"><![CDATA[<img src="/2018/01/12/我的资源/example.jpg" title="This is an example image">]]></content>
+      <title><![CDATA[SpringCloud-Eureka整理(一)]]></title>
+      <url>/2018/01/16/SpringCloud-Eureka%E6%95%B4%E7%90%86-%E4%B8%80/</url>
+      <content type="html"><![CDATA[<blockquote><p>服务治理的基础设施：构建服务注册中心，服务注册与服务发现，而Spring Cloud Eureka，使用Netflix Eureka来实现服务注册与发现，它包含服务端和客户端的组件。此节包含：搭建服务注册中心，注册服务提供者，搭建高可用注册中心，服务发现与消费</p>
+</blockquote>
+<h2 id="搭建服务注册中心-代码"><a href="#搭建服务注册中心-代码" class="headerlink" title="搭建服务注册中心 代码"></a>搭建服务注册中心 代码</h2><h3 id="maven构架xml"><a href="#maven构架xml" class="headerlink" title="maven构架xml"></a>maven构架xml</h3><pre><code>&lt;properties&gt;
+	&lt;project.build.sourceEncoding&gt;UTF-8&lt;&#x2F;project.build.sourceEncoding&gt;
+	&lt;project.reporting.outputEncoding&gt;UTF-8&lt;&#x2F;project.reporting.outputEncoding&gt;
+	&lt;java.version&gt;1.8&lt;&#x2F;java.version&gt;
+	&lt;spring-cloud.version&gt;Camden.SR7&lt;&#x2F;spring-cloud.version&gt;
+&lt;&#x2F;properties&gt;
+
+&lt;dependencies&gt;
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;
+		&lt;artifactId&gt;spring-cloud-starter-eureka-server&lt;&#x2F;artifactId&gt;
+	&lt;&#x2F;dependency&gt;
+
+	&lt;dependency&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-test&lt;&#x2F;artifactId&gt;
+		&lt;scope&gt;test&lt;&#x2F;scope&gt;
+	&lt;&#x2F;dependency&gt;
+&lt;&#x2F;dependencies&gt;
+
+&lt;dependencyManagement&gt;
+	&lt;dependencies&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework.cloud&lt;&#x2F;groupId&gt;
+			&lt;artifactId&gt;spring-cloud-dependencies&lt;&#x2F;artifactId&gt;
+			&lt;version&gt;${spring-cloud.version}&lt;&#x2F;version&gt;
+			&lt;type&gt;pom&lt;&#x2F;type&gt;
+			&lt;scope&gt;import&lt;&#x2F;scope&gt;
+		&lt;&#x2F;dependency&gt;
+	&lt;&#x2F;dependencies&gt;
+&lt;&#x2F;dependencyManagement&gt;</code></pre>
+<h3 id="主入库代码"><a href="#主入库代码" class="headerlink" title="主入库代码"></a>主入库代码</h3><pre><code>
+@EnableEurekaServer
+@SpringBootApplication
+public class EurekaServerApplication {
+
+public static void main(String[] args){
+SpringApplication.run(EurekaServerApplication.class, args);
+}
+}
+</code></pre>
+<h3 id="资源文件"><a href="#资源文件" class="headerlink" title="资源文件"></a>资源文件</h3><pre><code>spring.application.name=euraka-service
+server.port=8989
+eureka.instance.hostname=localhost
+#是否将自身注册#
+eureka.client.register-with-eureka=false
+#如果为true，启动时报警.
+eureka.client.fetch-registry=false
+eureka.client.serviceUrl.defaultZone=http:&#x2F;&#x2F;${eureka.instance.hostname}:${server.port}&#x2F;eureka&#x2F;
+</code></pre>
+<p>上述代码即构架完成了一个服务注册中心，运行后结果如下图：</p>
+<img src="/2018/01/16/SpringCloud-Eureka整理-一/1.png">]]></content>
       
         <categories>
             
-            <category> 资源 </category>
+            <category> 微服务 </category>
             
         </categories>
         
         
         <tags>
             
-            <tag> foo </tag>
+            <tag> SpringCloud </tag>
             
-            <tag> bar </tag>
+            <tag> Eureka </tag>
             
         </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[新页面]]></title>
-      <url>/2018/01/12/%E6%96%B0%E9%A1%B5%E9%9D%A2/</url>
-      <content type="html"><![CDATA[<blockquote><p>Do not just seek happiness for yourself. Seek happiness for all. Through kindness. Through mercy.</p>
-<footer><strong>David Levithan</strong><cite>Wide Awake</cite></footer></blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert(&apos;Hello World!&apos;);</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> PUB_APPLICATION_INTERVAL = ParmManager.GetParmValue(<span class="string">"PUB_APPLICATION_INTERVAL"</span>);</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">string</span>.IsNullOrEmpty(PUB_APPLICATION_INTERVAL)</span><br><span class="line">                &amp;&amp; PUB_APPLICATION_INTERVAL.IsNumeric())</span><br><span class="line">            &#123;</span><br><span class="line">                OnlineUserApplication.Current.Application_Interval = Convert.ToInt32(PUB_APPLICATION_INTERVAL);</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
-<p>##Pull Quote##</p>
-<blockquote class="pullquote [class]"><p>content</p>
-</blockquote>
-<img src="/path/to/image" class="我的">
-]]></content>
-      
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Git使用]]></title>
-      <url>/2018/01/12/Git%E4%BD%BF%E7%94%A8/</url>
-      <content type="html"></content>
-      
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[我的博客首页]]></title>
-      <url>/2018/01/11/%E6%88%91%E7%9A%84%E5%8D%9A%E5%AE%A2%E9%A6%96%E9%A1%B5/</url>
-      <content type="html"></content>
-      
         
     </entry>
     
