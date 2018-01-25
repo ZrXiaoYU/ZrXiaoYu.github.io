@@ -43,7 +43,7 @@
     
     <title>
         
-            标签: Eureka | 
+            WebSocket使用实录 | 
         
         ZrXiaoYU
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="">
-    <meta name="keywords" content="">
+    <meta name="keywords" content=",websocket,SuperSocket">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -81,6 +81,9 @@
         <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
 
         
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/github-v2.min.css?AfzKxt++K+/lhZBlSjnxwg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
             
         
 
@@ -217,7 +220,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="ZrXiaoYU">
-    <meta name="msapplication-starturl" content="https://zrxiaoyu.github.io/tags/Eureka/">
+    <meta name="msapplication-starturl" content="https://zrxiaoyu.github.io/2018/01/25/Websocket记录/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="ZrXiaoYU">
@@ -232,13 +235,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="https://zrxiaoyu.github.io/tags/Eureka/">
+    <meta property="og:url" content="https://zrxiaoyu.github.io/2018/01/25/Websocket记录/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="标签: Eureka | ZrXiaoYU">
+    <meta property="og:title" content="WebSocket使用实录 | ZrXiaoYU">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="">
-    
+    <meta property="og:article:tag" content="websocket"> <meta property="og:article:tag" content="SuperSocket"> 
 
+    
+        <meta property="article:published_time" content="Thu Jan 25 2018 13:48:09 GMT+0800">
+        <meta property="article:modified_time" content="Thu Jan 25 2018 16:03:08 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -246,13 +252,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="https://zrxiaoyu.github.io/tags/Eureka/index.html" />
+        <link rel="canonical" href="https://zrxiaoyu.github.io/2018/01/25/Websocket记录/index.html" />
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://zrxiaoyu.github.io/2018/01/25/Websocket记录/index.html",
+    "headline": "WebSocket使用实录",
+    "datePublished": "Thu Jan 25 2018 13:48:09 GMT+0800",
+    "dateModified": "Thu Jan 25 2018 16:03:08 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "XiaoYu",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "莫道人行早 更有早行人"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "ZrXiaoYU",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",websocket,SuperSocket",
+    "description": "",
+}
+</script>
 
 
     
@@ -286,160 +322,354 @@
                         </button>
                     
 
-                    <!-- Index Module -->
-<div class="material-index mdl-grid">
-    
-    <div class="locate-thumbnail-symbol"></div>
+                    <!-- Post TOC -->
 
-    <!-- Pin on top -->
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#絮叨言论"><span class="post-toc-number">1.</span> <span class="post-toc-text">絮叨言论</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#整理思路"><span class="post-toc-number">2.</span> <span class="post-toc-text">整理思路</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#服务端Socket-SuperSocket"><span class="post-toc-number">3.</span> <span class="post-toc-text">服务端Socket-SuperSocket</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用基本思路："><span class="post-toc-number">3.1.</span> <span class="post-toc-text">使用基本思路：</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#websocket"><span class="post-toc-number">4.</span> <span class="post-toc-text">websocket</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#C-调用C-调用"><span class="post-toc-number">5.</span> <span class="post-toc-text">C#调用C++调用</span></a></li></ol>
+    </ul>
     
 
-    <!-- Normal Post -->
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
     
         
             <!-- Random Thumbnail -->
             <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
 
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2018/01/16/SpringCloud-Eureka整理-二-详解/">SpringCloud-Eureka整理(二)-详解</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            这里通过客户端的入口角度深入Eureka的源码解析
-首先@EnableDiscoveryClient的解析中...
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2018/01/16/SpringCloud-Eureka整理-二-详解/" target="_self">阅读全文</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.png" width="44px" height="44px" alt="XiaoYu's avatar">
-            </div>
-            <div>
-                <strong>XiaoYu</strong>
-                <span>1月 16, 2018</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-          
-              <!-- Category -->
-              <span class="post_entry-category">
-                  <a class="post_category-link" href="/categories/微服务/">微服务</a>
-              </span>
-            
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2018/01/16/SpringCloud-Eureka整理-一/">SpringCloud-Eureka整理(一)-Eureka注册中心配置</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            服务治理的基础设施：构建服务注册中心，服务注册与服务发现，而Spring Cloud Eureka，使用Netflix Eu...
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2018/01/16/SpringCloud-Eureka整理-一/" target="_self">阅读全文</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.png" width="44px" height="44px" alt="XiaoYu's avatar">
-            </div>
-            <div>
-                <strong>XiaoYu</strong>
-                <span>1月 16, 2018</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-          
-              <!-- Category -->
-              <span class="post_entry-category">
-                  <a class="post_category-link" href="/categories/微服务/">微服务</a>
-              </span>
-            
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-
-    
-
-    
-        <script type="text/ls-javascript" id="thumbnail-script">
-    var randomNum;
-
-    var locatePost = $('.locate-thumbnail-symbol').next();
-    for(var i = 0; i < 10; i++) {
-        randomNum = Math.floor(Math.random() * 19 + 1);
-
-        locatePost.children('.post_thumbnail-random').attr('id', 'random_thumbnail-'+randomNum);
-        locatePost.children('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
     $('.post_thumbnail-random').addClass('lazy');
-
-        locatePost = locatePost.next();
-    }
 </script>
 
+        
+    
+            <p class="article-headline-p">
+                WebSocket使用实录
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>XiaoYu</strong>
+        <span>1月 25, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/SuperSocket/">SuperSocket</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/websocket/">websocket</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+
+    <!-- Share Twitter -->
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
     
 </div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h2 id="絮叨言论"><a href="#絮叨言论" class="headerlink" title="絮叨言论"></a>絮叨言论</h2><p> 公司现在用到了智能柜的业务，需要网页和智能柜的硬件做交互，自己很少接触硬件，但大致也知道，处于安全考虑，网页应该是不能调用操作系统里面的很多功能（哈哈，不懂装懂了），所以领导提了个方案，一个是在网页的外层做一个winfrom的壳，通过壳来做中间商完成硬件和网页的交互，这个方案之前有人弄过，可以通过对URL的监听来完成交互。后面我也一直在思考这个问题，难道一定要靠这种中间商来完成了，有没有其他的办法，后面想到网络编程中有提高socket可以用来做远程指令的东东，那我就和领导建议能否用这种方式，现在大多数的浏览器也支持websocket，完全可以做一个指令转发的服务来完成，这个“光荣”的任务也就落到我的身上了。</p>
+<h2 id="整理思路"><a href="#整理思路" class="headerlink" title="整理思路"></a>整理思路</h2><p>1.服务端Socket（最开始是这样认为的！后面就碰到麻烦了）,服务端使用的是SuperSocket来进行socket的业务规则。<br>2.客户端websocket<br>3.C#调用C++dll来模拟硬件厂商的提供的智能柜的调用。</p>
+<h2 id="服务端Socket-SuperSocket"><a href="#服务端Socket-SuperSocket" class="headerlink" title="服务端Socket-SuperSocket"></a>服务端Socket-SuperSocket</h2><p>SuperSocket是一个轻量级的可扩展套接字应用程序框架。您可以使用它来轻松构建服务器端套接字应用程序，而无需考虑如何使用套接字，如何维护套接字连接以及套接字如何工作</p>
+<p>项目文档：<a href="http://docs.supersocket.net/v1-6/zh-CN" target="_blank" rel="noopener">http://docs.supersocket.net/v1-6/zh-CN</a><br>使用这个开发库的原因是：在上面已经介绍过了，跟着上面的文档也基本能够搭建出来一个可以运行的Socket的服务端程序，但是，但是问题来了，这里搭建的socket的不符合websocket的调用协议，所以需要在使用SuperSocket.websocket来搭建socket服务端，基本的使用方式和SuperSocket的一样。</p>
+<h3 id="使用基本思路："><a href="#使用基本思路：" class="headerlink" title="使用基本思路："></a>使用基本思路：</h3><pre><code>
+Console.WriteLine(&quot;Press any key to start the server!&quot;);
+
+   Console.ReadKey();
+   Console.WriteLine();
+
+   var appServer = new AppServer();
+
+   &#x2F;&#x2F;Setup the appServer
+   if (!appServer.Setup(2012)) &#x2F;&#x2F;Setup with listening port
+   {
+       Console.WriteLine(&quot;Failed to setup!&quot;);
+       Console.ReadKey();
+       return;
+   }
+
+   Console.WriteLine();
+
+   &#x2F;&#x2F;Try to start the appServer
+   if (!appServer.Start())
+   {
+       Console.WriteLine(&quot;Failed to start!&quot;);
+       Console.ReadKey();
+       return;
+   }
+
+   Console.WriteLine(&quot;The server started successfully, press key &#39;q&#39; to stop it!&quot;);
+
+   while (Console.ReadKey().KeyChar != &#39;q&#39;)
+   {
+       Console.WriteLine();
+       continue;
+   }
+
+   &#x2F;&#x2F;Stop the appServer
+   appServer.Stop();
+
+   Console.WriteLine(&quot;The server was stopped!&quot;);
+   Console.ReadKey();</code></pre>
+<p>基本上这样就可以配置一个Socket出来了，后续还会对SuperSocket进行其他介绍，这里就简单介绍下。</p>
+<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><p>WebSocket是一种计算机通信协议，通过单个TCP连接提供全双工通信信道。WebSocket协议被标准化IETF如RFC 2011 6455，以及网页套接字API中的Web IDL正在由标准化W3C。</p>
+<p>WebSocket是来自HTTP的不同的TCP协议。这两个协议都位于OSI模型中的第7层，因此依赖于第4层的TCP。虽然它们不同，但是RFC 6455指出WebSocket被设计为在HTTP端口80和443上工作，并且支持HTTP代理和中介“，从而使其与HTTP协议兼容。为了实现兼容性，WebSocket 握手使用HTTP升级头[1]从HTTP协议更改为WebSocket协议。</p>
+<p>WebSocket协议支持Web客户端（例如浏览器）和Web服务器之间的交互，开销较低，便于实时向服务器传输数据。这可以通过为服务器提供一种标准化的方式来向客户端发送内容，而不需要客户端首先请求，并且允许消息在保持连接打开的情况下来回传递。通过这种方式，客户端和服务器之间可以进行双向（双向）对话。通信是通过TCP 端口号80（或在TLS加密连接的情况下为443 ）完成的，这对于那些使用防火墙阻止非web互联网连接的环境是有益的。类似的双向浏览器 - 服务器通信已经以非标准化的方式使用诸如Comet的临时技术来实现。</p>
+<p>参考：<a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/WebSocket</a></p>
+<p>通过在上面的应用引入<code>SuperSocket.websocket</code>来构架ws和wss协议的socket服务，这样才能够实现websocket与socket服务的连接和消息传输。</p>
+<pre><code>var appServer = new WebSocketServer();
+</code></pre><p>前台通过调用：</p>
+<pre><code> function connectSocketServer() {
+    var support = &quot;MozWebSocket&quot; in window ? &#39;MozWebSocket&#39; : (&quot;WebSocket&quot; in window ? &#39;WebSocket&#39; : null);
+
+    if (support == null) {
+        appendMessage(&quot;* &quot; + noSupportMessage + &quot;&lt;br&#x2F;&gt;&quot;);
+        return;
+    }
+
+    appendMessage(&quot;* Connecting to server ..&lt;br&#x2F;&gt;&quot;);
+    &#x2F;&#x2F; create a new websocket and connect
+    &#x2F;&#x2F;ws = new window[support](&#39;ws:&#x2F;&#x2F;localhost:2012&#x2F;&#39;);
+    ws = new WebSocket(&quot;ws:&#x2F;&#x2F;localhost:2012&#x2F;&quot;);
+
+    &#x2F;&#x2F; when data is comming from the server, this metod is called
+    ws.onmessage = function (evt) {
+        appendMessage(&quot;#服务器：&quot; + evt.data + &quot;&lt;br &#x2F;&gt;&quot;);
+        &#x2F;&#x2F;test(evt.data);
+    };
+
+    &#x2F;&#x2F; when the connection is established, this method is called
+    ws.onopen = function () {
+        appendMessage(&#39;* Connection open&lt;br&#x2F;&gt;&#39;);
+        $(&#39;#messageInput&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#sendButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#connectButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#disconnectButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+    };
+
+    &#x2F;&#x2F; when the connection is closed, this method is called
+    ws.onclose = function () {
+        appendMessage(&#39;* Connection closed&lt;br&#x2F;&gt;&#39;);
+        $(&#39;#messageInput&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#sendButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#connectButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#disconnectButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+    }
+}
+
+function sendMessage() {
+    if (ws) {
+        var messageBox = document.getElementById(&#39;messageInput&#39;);
+        alert(&quot;SERVER&quot; + &quot; &quot; + messageBox.value);
+        ws.send(&quot;SERVER&quot; + &quot; &quot; + messageBox.value);
+        messageBox.value = &quot;&quot;;
+    }
+}</code></pre>
+<h2 id="C-调用C-调用"><a href="#C-调用C-调用" class="headerlink" title="C#调用C++调用"></a>C#调用C++调用</h2><p>加载dll，通过如下代码：</p>
+<pre><code>
+public class CFunction
+   {
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int add(int x, int y);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int sub(int x, int y);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int testChar(ref byte src, ref byte res, int nCount);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int testStruct(ref SystemTime stSrc, ref SystemTime stRes);
+   }
+</code></pre>
+<p>而MyNativeDll.dll需要在bin/debug/生成文件夹下即可。</p>
+<p>这里遇到两个小麻烦：<br>1.32位和64位的关系，需要将生成中的目标平台选为：x86,不然会报如下错误无法识别的问题<br>2.c++不太理解，但是编译为dll查看其相关的方法名（通过C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\dumpbin.exe）来列举出方法名的正确显示。</p>
+<p>在cmd中通过dumpbin.exe /exports MyNativeDll.dll &gt; d:\my.txt</p>
+<p>显示如下内容</p>
+<pre><code>
+      Microsoft (R) COFF&#x2F;PE Dumper Version 14.00.24215.1
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+       Dump of file d:&#x2F;MathFuncsDll.dll
+
+      File Type: DLL
+
+ Section contains the following exports for MathFuncsDll.dll
+
+00000000 characteristics
+5A694EB9 time date stamp Thu Jan 25 11:27:53 2018
+    0.00 version
+       1 ordinal base
+       4 number of functions
+       4 number of names
+
+ordinal hint RVA      name
+
+      1    0 000111D1 ?Add@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+460(?Add@MyMathFuncs@MathFuncs@@SANNN@Z)
+      2    1 00011037 ?Divide@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+50(?Divide@MyMathFuncs@MathFuncs@@SANNN@Z)
+      3    2 000110AF ?Multiply@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+170(?Multiply@MyMathFuncs@MathFuncs@@SANNN@Z)
+      4    3 0001105A ?Subtract@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+85(?Subtract@MyMathFuncs@MathFuncs@@SANNN@Z)
+ Summary
+
+    1000 .00cfg
+    1000 .data
+    1000 .gfids
+    1000 .idata
+    3000 .rdata
+    1000 .reloc
+    1000 .rsrc
+    6000 .text
+   10000 .textbss
+</code></pre>
+<p>通过name如下操作就可以进行相关调用：</p>
+<pre><code>
+[DllImport(&quot;MathFuncsDll.dll&quot;,EntryPoint = &quot;?Add@MyMathFuncs@MathFuncs@@SANNN@Z&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+public extern static double Add(double x, double y);
+</code></pre>
+<p>通过上面的这些知识点基本能够满足领导的要求了，嘘……</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/01/16/SpringCloud-Eureka整理-二-详解/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
 
 
                     
@@ -615,6 +845,14 @@ It will not impact the appearance and can give developers a lot of support :)
                     
 
                     
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
 
                     <!--Footer-->
 <footer class="mdl-mini-footer" id="bottom">
@@ -743,6 +981,10 @@ It will not impact the appearance and can give developers a lot of support :)
 <!-- Import prettify js  -->
 
     
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
 
 
 
@@ -755,6 +997,11 @@ It will not impact the appearance and can give developers a lot of support :)
     });
 
     
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
         
     
     

@@ -3,7 +3,213 @@
   
     
     <entry>
-      <title><![CDATA[SpringCloud-Eureka整理(一)]]></title>
+      <title><![CDATA[WebSocket使用实录]]></title>
+      <url>/2018/01/25/Websocket%E8%AE%B0%E5%BD%95/</url>
+      <content type="html"><![CDATA[<h2 id="絮叨言论"><a href="#絮叨言论" class="headerlink" title="絮叨言论"></a>絮叨言论</h2><p> 公司现在用到了智能柜的业务，需要网页和智能柜的硬件做交互，自己很少接触硬件，但大致也知道，处于安全考虑，网页应该是不能调用操作系统里面的很多功能（哈哈，不懂装懂了），所以领导提了个方案，一个是在网页的外层做一个winfrom的壳，通过壳来做中间商完成硬件和网页的交互，这个方案之前有人弄过，可以通过对URL的监听来完成交互。后面我也一直在思考这个问题，难道一定要靠这种中间商来完成了，有没有其他的办法，后面想到网络编程中有提高socket可以用来做远程指令的东东，那我就和领导建议能否用这种方式，现在大多数的浏览器也支持websocket，完全可以做一个指令转发的服务来完成，这个“光荣”的任务也就落到我的身上了。</p>
+<h2 id="整理思路"><a href="#整理思路" class="headerlink" title="整理思路"></a>整理思路</h2><p>1.服务端Socket（最开始是这样认为的！后面就碰到麻烦了）,服务端使用的是SuperSocket来进行socket的业务规则。<br>2.客户端websocket<br>3.C#调用C++dll来模拟硬件厂商的提供的智能柜的调用。</p>
+<h2 id="服务端Socket-SuperSocket"><a href="#服务端Socket-SuperSocket" class="headerlink" title="服务端Socket-SuperSocket"></a>服务端Socket-SuperSocket</h2><p>SuperSocket是一个轻量级的可扩展套接字应用程序框架。您可以使用它来轻松构建服务器端套接字应用程序，而无需考虑如何使用套接字，如何维护套接字连接以及套接字如何工作</p>
+<p>项目文档：<a href="http://docs.supersocket.net/v1-6/zh-CN" target="_blank" rel="noopener">http://docs.supersocket.net/v1-6/zh-CN</a><br>使用这个开发库的原因是：在上面已经介绍过了，跟着上面的文档也基本能够搭建出来一个可以运行的Socket的服务端程序，但是，但是问题来了，这里搭建的socket的不符合websocket的调用协议，所以需要在使用SuperSocket.websocket来搭建socket服务端，基本的使用方式和SuperSocket的一样。</p>
+<h3 id="使用基本思路："><a href="#使用基本思路：" class="headerlink" title="使用基本思路："></a>使用基本思路：</h3><pre><code>
+Console.WriteLine(&quot;Press any key to start the server!&quot;);
+
+   Console.ReadKey();
+   Console.WriteLine();
+
+   var appServer = new AppServer();
+
+   &#x2F;&#x2F;Setup the appServer
+   if (!appServer.Setup(2012)) &#x2F;&#x2F;Setup with listening port
+   {
+       Console.WriteLine(&quot;Failed to setup!&quot;);
+       Console.ReadKey();
+       return;
+   }
+
+   Console.WriteLine();
+
+   &#x2F;&#x2F;Try to start the appServer
+   if (!appServer.Start())
+   {
+       Console.WriteLine(&quot;Failed to start!&quot;);
+       Console.ReadKey();
+       return;
+   }
+
+   Console.WriteLine(&quot;The server started successfully, press key &#39;q&#39; to stop it!&quot;);
+
+   while (Console.ReadKey().KeyChar != &#39;q&#39;)
+   {
+       Console.WriteLine();
+       continue;
+   }
+
+   &#x2F;&#x2F;Stop the appServer
+   appServer.Stop();
+
+   Console.WriteLine(&quot;The server was stopped!&quot;);
+   Console.ReadKey();</code></pre>
+<p>基本上这样就可以配置一个Socket出来了，后续还会对SuperSocket进行其他介绍，这里就简单介绍下。</p>
+<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><p>WebSocket是一种计算机通信协议，通过单个TCP连接提供全双工通信信道。WebSocket协议被标准化IETF如RFC 2011 6455，以及网页套接字API中的Web IDL正在由标准化W3C。</p>
+<p>WebSocket是来自HTTP的不同的TCP协议。这两个协议都位于OSI模型中的第7层，因此依赖于第4层的TCP。虽然它们不同，但是RFC 6455指出WebSocket被设计为在HTTP端口80和443上工作，并且支持HTTP代理和中介“，从而使其与HTTP协议兼容。为了实现兼容性，WebSocket 握手使用HTTP升级头[1]从HTTP协议更改为WebSocket协议。</p>
+<p>WebSocket协议支持Web客户端（例如浏览器）和Web服务器之间的交互，开销较低，便于实时向服务器传输数据。这可以通过为服务器提供一种标准化的方式来向客户端发送内容，而不需要客户端首先请求，并且允许消息在保持连接打开的情况下来回传递。通过这种方式，客户端和服务器之间可以进行双向（双向）对话。通信是通过TCP 端口号80（或在TLS加密连接的情况下为443 ）完成的，这对于那些使用防火墙阻止非web互联网连接的环境是有益的。类似的双向浏览器 - 服务器通信已经以非标准化的方式使用诸如Comet的临时技术来实现。</p>
+<p>参考：<a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/WebSocket</a></p>
+<p>通过在上面的应用引入<code>SuperSocket.websocket</code>来构架ws和wss协议的socket服务，这样才能够实现websocket与socket服务的连接和消息传输。</p>
+<pre><code>var appServer = new WebSocketServer();
+</code></pre><p>前台通过调用：</p>
+<pre><code> function connectSocketServer() {
+    var support = &quot;MozWebSocket&quot; in window ? &#39;MozWebSocket&#39; : (&quot;WebSocket&quot; in window ? &#39;WebSocket&#39; : null);
+
+    if (support == null) {
+        appendMessage(&quot;* &quot; + noSupportMessage + &quot;&lt;br&#x2F;&gt;&quot;);
+        return;
+    }
+
+    appendMessage(&quot;* Connecting to server ..&lt;br&#x2F;&gt;&quot;);
+    &#x2F;&#x2F; create a new websocket and connect
+    &#x2F;&#x2F;ws = new window[support](&#39;ws:&#x2F;&#x2F;localhost:2012&#x2F;&#39;);
+    ws = new WebSocket(&quot;ws:&#x2F;&#x2F;localhost:2012&#x2F;&quot;);
+
+    &#x2F;&#x2F; when data is comming from the server, this metod is called
+    ws.onmessage = function (evt) {
+        appendMessage(&quot;#服务器：&quot; + evt.data + &quot;&lt;br &#x2F;&gt;&quot;);
+        &#x2F;&#x2F;test(evt.data);
+    };
+
+    &#x2F;&#x2F; when the connection is established, this method is called
+    ws.onopen = function () {
+        appendMessage(&#39;* Connection open&lt;br&#x2F;&gt;&#39;);
+        $(&#39;#messageInput&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#sendButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#connectButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#disconnectButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+    };
+
+    &#x2F;&#x2F; when the connection is closed, this method is called
+    ws.onclose = function () {
+        appendMessage(&#39;* Connection closed&lt;br&#x2F;&gt;&#39;);
+        $(&#39;#messageInput&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#sendButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        $(&#39;#connectButton&#39;).attr(&quot;disabled&quot;, &quot;&quot;);
+        $(&#39;#disconnectButton&#39;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+    }
+}
+
+function sendMessage() {
+    if (ws) {
+        var messageBox = document.getElementById(&#39;messageInput&#39;);
+        alert(&quot;SERVER&quot; + &quot; &quot; + messageBox.value);
+        ws.send(&quot;SERVER&quot; + &quot; &quot; + messageBox.value);
+        messageBox.value = &quot;&quot;;
+    }
+}</code></pre>
+<h2 id="C-调用C-调用"><a href="#C-调用C-调用" class="headerlink" title="C#调用C++调用"></a>C#调用C++调用</h2><p>加载dll，通过如下代码：</p>
+<pre><code>
+public class CFunction
+   {
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int add(int x, int y);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int sub(int x, int y);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int testChar(ref byte src, ref byte res, int nCount);
+
+       [DllImport(&quot;MyNativeDll.dll&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+       public extern static int testStruct(ref SystemTime stSrc, ref SystemTime stRes);
+   }
+</code></pre>
+<p>而MyNativeDll.dll需要在bin/debug/生成文件夹下即可。</p>
+<p>这里遇到两个小麻烦：<br>1.32位和64位的关系，需要将生成中的目标平台选为：x86,不然会报如下错误无法识别的问题<br>2.c++不太理解，但是编译为dll查看其相关的方法名（通过C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\dumpbin.exe）来列举出方法名的正确显示。</p>
+<p>在cmd中通过dumpbin.exe /exports MyNativeDll.dll &gt; d:\my.txt</p>
+<p>显示如下内容</p>
+<pre><code>
+      Microsoft (R) COFF&#x2F;PE Dumper Version 14.00.24215.1
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+       Dump of file d:&#x2F;MathFuncsDll.dll
+
+      File Type: DLL
+
+ Section contains the following exports for MathFuncsDll.dll
+
+00000000 characteristics
+5A694EB9 time date stamp Thu Jan 25 11:27:53 2018
+    0.00 version
+       1 ordinal base
+       4 number of functions
+       4 number of names
+
+ordinal hint RVA      name
+
+      1    0 000111D1 ?Add@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+460(?Add@MyMathFuncs@MathFuncs@@SANNN@Z)
+      2    1 00011037 ?Divide@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+50(?Divide@MyMathFuncs@MathFuncs@@SANNN@Z)
+      3    2 000110AF ?Multiply@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+170(?Multiply@MyMathFuncs@MathFuncs@@SANNN@Z)
+      4    3 0001105A ?Subtract@MyMathFuncs@MathFuncs@@SANNN@Z = @ILT+85(?Subtract@MyMathFuncs@MathFuncs@@SANNN@Z)
+ Summary
+
+    1000 .00cfg
+    1000 .data
+    1000 .gfids
+    1000 .idata
+    3000 .rdata
+    1000 .reloc
+    1000 .rsrc
+    6000 .text
+   10000 .textbss
+</code></pre>
+<p>通过name如下操作就可以进行相关调用：</p>
+<pre><code>
+[DllImport(&quot;MathFuncsDll.dll&quot;,EntryPoint = &quot;?Add@MyMathFuncs@MathFuncs@@SANNN@Z&quot;, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+public extern static double Add(double x, double y);
+</code></pre>
+<p>通过上面的这些知识点基本能够满足领导的要求了，嘘……</p>
+]]></content>
+      
+        <categories>
+            
+            <category> webSocket </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> websocket </tag>
+            
+            <tag> SuperSocket </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[SpringCloud-Eureka整理(二)-详解]]></title>
+      <url>/2018/01/16/SpringCloud-Eureka%E6%95%B4%E7%90%86-%E4%BA%8C-%E8%AF%A6%E8%A7%A3/</url>
+      <content type="html"><![CDATA[<p>这里通过客户端的入口角度深入Eureka的源码解析</p>
+<p>首先<code>@EnableDiscoveryClient</code>的解析中，使用java和spring引入的配置注解<code>@Import</code>来实例化<code>EnableDiscoveryClientImportSelector</code>这个类<br>更多关于@Import的使用请参考：<a href="https://segmentfault.com/a/1190000011068471" target="_blank" rel="noopener">spring框架中的@Import注解</a>和<a href="http://www.cnblogs.com/peida/archive/2013/04/24/3036689.html" target="_blank" rel="noopener">深入理解Java：注解（Annotation）自定义注解入门</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> SpringCloud </tag>
+            
+            <tag> Eureka </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[SpringCloud-Eureka整理(一)-Eureka注册中心配置]]></title>
       <url>/2018/01/16/SpringCloud-Eureka%E6%95%B4%E7%90%86-%E4%B8%80/</url>
       <content type="html"><![CDATA[<blockquote><p>服务治理的基础设施：构建服务注册中心，服务注册与服务发现，而Spring Cloud Eureka，使用Netflix Eureka来实现服务注册与发现，它包含服务端和客户端的组件。此节包含：搭建服务注册中心，注册服务提供者，搭建高可用注册中心，服务发现与消费</p>
 </blockquote>
@@ -58,7 +264,31 @@ eureka.client.fetch-registry=false
 eureka.client.serviceUrl.defaultZone=http:&#x2F;&#x2F;${eureka.instance.hostname}:${server.port}&#x2F;eureka&#x2F;
 </code></pre>
 <p>上述代码即构架完成了一个服务注册中心，运行后结果如下图：</p>
-<img src="/2018/01/16/SpringCloud-Eureka整理-一/1.png">]]></content>
+<img src="/2018/01/16/SpringCloud-Eureka整理-一/1.png">
+<h2 id="搭建高可用注册中心"><a href="#搭建高可用注册中心" class="headerlink" title="搭建高可用注册中心"></a>搭建高可用注册中心</h2><p>实现关键是对于注册服务的相关注册开启，建立两个配置文件分别如下：</p>
+<p>application-peer1.properties:</p>
+<pre><code>spring.application.name=eureka-server
+server.port=8001
+#是否将自身注册#
+eureka.client.register-with-eureka=true
+eureka.client.fetch-registry=true
+eureka.instance.hostname=peer1
+eureka.client.serviceUrl.defaultZone=http:&#x2F;&#x2F;peer2:8002&#x2F;eureka&#x2F;
+</code></pre>
+<p>application-peer2.properties:</p>
+<pre><code>spring.application.name=eureka-server
+server.port=8002
+#是否将自身注册#
+eureka.client.register-with-eureka=true
+eureka.client.fetch-registry=true
+eureka.instance.hostname=peer2
+eureka.client.serviceUrl.defaultZone=http:&#x2F;&#x2F;peer1:8001&#x2F;eureka&#x2F;
+</code></pre>
+<p>通过IDE的jar Application分别启动这两个配置文件，即可搭建相互注册的集群配置。</p>
+<pre><code>java -jar eureka-server-1.0.0.jar --spring.profiles.active=peer1
+java -jar eureka-server-1.0.0.jar --spring.profiles.active=peer1
+</code></pre><p>参考：《Spring Cloud微服务实战》</p>
+]]></content>
       
         <categories>
             
@@ -81,13 +311,17 @@ eureka.client.serviceUrl.defaultZone=http:&#x2F;&#x2F;${eureka.instance.hostname
       <title><![CDATA[Hello World]]></title>
       <url>/2018/01/11/hello-world/</url>
       <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
       
